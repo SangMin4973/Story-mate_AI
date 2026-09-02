@@ -1,10 +1,17 @@
 import json
+import logging
+import os
 from character import character_quizzes, character_prompts
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import SystemMessagePromptTemplate,  HumanMessagePromptTemplate, ChatPromptTemplate
 from utils import (
-    initialize_chroma_db, fetch_data, initialize_retriever, initialize_llm
+    initialize_chroma_db, fetch_data, initialize_retriever, initialize_llm,
+    find_embedding_base_path, resolve_key
 )
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+logger = logging.getLogger(__name__)
+
 
 def get_quiz_question(book_title: str, character_name: str, quiz_type: str):
     """
@@ -18,8 +25,15 @@ def get_quiz_question(book_title: str, character_name: str, quiz_type: str):
     출력:
     - 퀴즈의 질문(문제)만 문자열로 반환
     """
+    resolved_book_title = resolve_key(character_quizzes, book_title)
+    if not resolved_book_title:
+        return f"'{book_title}' 작품의 퀴즈 데이터를 찾을 수 없습니다."
+    resolved_character_name = resolve_key(character_quizzes[resolved_book_title], character_name)
+    if not resolved_character_name:
+        return f"'{character_name}'에 대한 퀴즈 데이터를 찾을 수 없습니다."
+
     # 캐릭터의 퀴즈 데이터 가져오기
-    character_quiz = character_quizzes[book_title][character_name]
+    character_quiz = character_quizzes[resolved_book_title][resolved_character_name]
 
     # 캐릭터 정보가 없을 경우 예외처리
     if not character_quiz:
@@ -49,8 +63,17 @@ def evaluate_quiz_answer(book_title: str, character_name: str, quiz_type: str, u
     - 서술형: 문자열(LLM 응답)만 반환
     """
 
+    resolved_book_title = resolve_key(character_quizzes, book_title)
+    if not resolved_book_title:
+        return json.dumps({"error": f"'{book_title}' 작품의 퀴즈 데이터를 찾을 수 없습니다."}, ensure_ascii=False)
+    resolved_quiz_character_name = resolve_key(character_quizzes[resolved_book_title], character_name)
+    if not resolved_quiz_character_name:
+        return json.dumps({"error": f"'{character_name}'에 대한 퀴즈 데이터를 찾을 수 없습니다."}, ensure_ascii=False)
+    if not isinstance(user_answer, str) or not user_answer.strip():
+        return json.dumps({"error": "사용자 답변이 없습니다."}, ensure_ascii=False)
+
     # ✅ 캐릭터의 퀴즈 데이터 가져오기
-    character_quiz = character_quizzes[book_title][character_name]
+    character_quiz = character_quizzes[resolved_book_title][resolved_quiz_character_name]
 
     if not character_quiz:
         return json.dumps({"error": f"'{character_name}'에 대한 퀴즈 데이터를 찾을 수 없습니다."}, ensure_ascii=False)
@@ -77,7 +100,15 @@ def evaluate_quiz_answer(book_title: str, character_name: str, quiz_type: str, u
     # ✅ 서술형(논술형) 문제는 LLM을 사용하여 평가
     elif quiz_type == "essay":
         # 1️⃣ 캐릭터 프롬프트 가져오기
-        character_prompt = character_prompts[book_title][character_name]
+        resolved_prompt_book_title = resolve_key(character_prompts, resolved_book_title)
+        if not resolved_prompt_book_title:
+            return json.dumps({"error": f"'{book_title}' 작품의 캐릭터 설정을 찾을 수 없습니다."}, ensure_ascii=False)
+
+        resolved_prompt_character_name = resolve_key(character_prompts[resolved_prompt_book_title], character_name)
+        if not resolved_prompt_character_name:
+            return json.dumps({"error": f"'{character_name}'에 대한 캐릭터 설정을 찾을 수 없습니다."}, ensure_ascii=False)
+
+        character_prompt = character_prompts[resolved_prompt_book_title][resolved_prompt_character_name]
 
         # 2️⃣ LLM 프롬프트 생성
         prompt_template = ChatPromptTemplate.from_messages([
@@ -106,8 +137,10 @@ def evaluate_quiz_answer(book_title: str, character_name: str, quiz_type: str, u
             [출력 형식]
             아래 **JSON 형식으로만 최종 답변을 작성하시오**. **불필요한 문장/토큰(예시: `,json)은 절대 추가하지 마세요.**
 
-            "correct": "O 또는 C 또는 X",
-            "response": "답변 설명을 여기에 작성"
+            {{
+              "correct": "O 또는 C 또는 X",
+              "response": "답변 설명을 여기에 작성"
+            }}
             
             """
             ),
@@ -117,7 +150,13 @@ def evaluate_quiz_answer(book_title: str, character_name: str, quiz_type: str, u
         # 3️⃣ LLM 호출
         llm = initialize_llm(model_name="gpt-4o")
         chain = prompt_template | llm | StrOutputParser()
-        base_path = f"{book_title}/data/embedding"
+        try:
+            base_path = find_embedding_base_path(BASE_DIR, resolved_book_title, resolved_prompt_character_name)
+        except FileNotFoundError as exc:
+            return {
+                "quiz_type": quiz_type,
+                "error": str(exc)
+            }
 
         # ✅ Chroma DB 초기화
         q_db = initialize_chroma_db(f"{base_path}/예상질문_chroma_db")
@@ -145,8 +184,15 @@ def evaluate_quiz_answer(book_title: str, character_name: str, quiz_type: str, u
         }
 
         # ✅ LLM으로부터 답변 받기
-        response = json.loads(chain.invoke(input_data))
-        print(prompt_template.format(**input_data))
+        try:
+            response = json.loads(chain.invoke(input_data))
+        except json.JSONDecodeError:
+            return {
+                "quiz_type": quiz_type,
+                "error": "서술형 평가 응답이 JSON 형식이 아닙니다."
+            }
+
+        logger.debug("서술형 평가 프롬프트: %s", prompt_template.format(**input_data))
         response["quiz_type"] = quiz_type
 
         # 에세이(서술형)는 문자열(LLM 응답)만 반환

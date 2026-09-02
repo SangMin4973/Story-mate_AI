@@ -22,17 +22,11 @@ COPY 성냥팔이소녀/ /app/성냥팔이소녀
 COPY 시골쥐서울구경/ /app/시골쥐서울구경
 COPY 심봉사/ /app/심봉사
 
-
-
-# db환경변수
-ENV DB_HOST=localhost
-ENV DB_USER=root
-ENV DB_PASSWORD=1234
-ENV DB_NAME=chatdb
+# DB 접속 정보는 컨테이너 실행 환경에서 주입합니다.
 ENV DB_CHARSET=utf8mb4
 
 # 패키지 설치
 RUN pip install --no-cache-dir -r requirements.txt
 
-# 5⃣ Flask 서버 실행
+# Flask 서버 실행
 CMD ["python", "app.py"]

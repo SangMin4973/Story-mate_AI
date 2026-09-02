@@ -1,6 +1,8 @@
 import os
+import logging
 import pymysql
 from dotenv import load_dotenv
+from character import character_prompts
 
 # .env 파일 로드
 load_dotenv()
@@ -14,6 +16,18 @@ DB_CHARSET = os.getenv("DB_CHARSET", "utf8mb4")  # 기본값 utf8mb4
 
 # MariaDB 연결 함수
 def get_db_connection():
+    missing_envs = [
+        name for name, value in {
+            "DB_HOST": DB_HOST,
+            "DB_USER": DB_USER,
+            "DB_PASSWORD": DB_PASSWORD,
+            "DB_NAME": DB_NAME,
+        }.items()
+        if not value
+    ]
+    if missing_envs:
+        raise ValueError(f"DB 환경변수가 누락되었습니다: {', '.join(missing_envs)}")
+
     return pymysql.connect(
         host=DB_HOST,
         user=DB_USER,
@@ -29,11 +43,14 @@ from langchain_core.prompts import ChatPromptTemplate
 
 # 모듈에서 필요한 함수들을 임포트
 from utils import (
-    initialize_chroma_db, fetch_data, initialize_retriever, initialize_llm
+    initialize_chroma_db, fetch_data, initialize_retriever, initialize_llm,
+    find_embedding_base_path, resolve_key
 )
 from template import get_character_template
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+logger = logging.getLogger(__name__)
 
 
 
@@ -42,10 +59,18 @@ class ChatBot:
 
     # ✅ ChatBot 클래스 초기화
     def __init__(self, character_name, book_title):
+        resolved_book_title = resolve_key(character_prompts, book_title)
+        if not resolved_book_title:
+            raise ValueError(f"'{book_title}' 작품 정보를 찾을 수 없습니다.")
+        resolved_character_name = resolve_key(character_prompts[resolved_book_title], character_name)
+        if not resolved_character_name:
+            raise ValueError(f"'{book_title}'의 '{character_name}' 캐릭터 정보를 찾을 수 없습니다.")
+
         # 2) DB 경로 설정
-        base_path = f"{book_title}/{character_name}/data/embedding"
-        self.character_name = character_name
-        self.book_title = book_title
+        base_path = find_embedding_base_path(BASE_DIR, resolved_book_title, resolved_character_name)
+        self.character_name = resolved_character_name
+        self.book_title = resolved_book_title
+
         # 3) DB & 리트리버 초기화
         self.q_db = initialize_chroma_db(f"{base_path}/예상질문_chroma_db")
         self.e_db = initialize_chroma_db(f"{base_path}/인물평가_chroma_db")
@@ -58,7 +83,7 @@ class ChatBot:
         self.c_retriever = initialize_retriever(self.c_db)
 
         # 4) 템플릿 & LLM
-        self.prompt_template = get_character_template(book_title, character_name)
+        self.prompt_template = get_character_template(resolved_book_title, resolved_character_name)
         self.llm = initialize_llm(model_name="gpt-4o")
 
         # 5) 체인 결합 (PromptTemplate → LLM → StrOutputParser)
@@ -72,12 +97,15 @@ class ChatBot:
         """
         특정 session_id의 대화 기록을 MariaDB에서 불러옴
         """
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        cursor.execute("SELECT role, content FROM conversations WHERE session_id = %s ORDER BY created_at", (session_id,))
-        messages = cursor.fetchall()
-        conn.close()
-        return messages
+        conn = None
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute("SELECT role, content FROM conversations WHERE session_id = %s ORDER BY created_at", (session_id,))
+            return cursor.fetchall()
+        finally:
+            if conn:
+                conn.close()
 
 
 
@@ -86,14 +114,18 @@ class ChatBot:
         """
         MariaDB에 새로운 대화 내용을 저장
         """
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        cursor.execute(
-            "INSERT INTO conversations (session_id, role, content) VALUES (%s, %s, %s)",
-            (session_id, role, content)
-        )
-        conn.commit()
-        conn.close()
+        conn = None
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute(
+                "INSERT INTO conversations (session_id, role, content) VALUES (%s, %s, %s)",
+                (session_id, role, content)
+            )
+            conn.commit()
+        finally:
+            if conn:
+                conn.close()
 
 
 
@@ -138,7 +170,7 @@ class ChatBot:
         summary_chain = ChatPromptTemplate.from_template(summary_prompt) | self.llm | StrOutputParser()
         summary = summary_chain.invoke({"conversation_text": conversation_text})
 
-        print(f"[대화 요약]: {summary}")
+        logger.info("[대화 요약]: %s", summary)
         return summary 
 
 
@@ -152,7 +184,7 @@ class ChatBot:
         if not isinstance(user_query, str) or not user_query.strip():
             return "오류: 질문이 없습니다."
 
-        print(f"📌 get_answer()에서 user_query 확인: {user_query} (type: {type(user_query)})")
+        logger.info("get_answer()에서 user_query 확인: %s (type: %s)", user_query, type(user_query))
         
         # 각 DB에서 context를 검색
         question_context  = fetch_data(self.q_retriever, user_query)
