@@ -1,0 +1,40 @@
+{
+  "baseline_id": "chunk_larger",
+  "status": "current_retriever_baseline",
+  "doc4_policy": "exclude",
+  "chroma_path": "storymate/운수좋은날/김첨지/data/chunk_experiments/chunk_larger",
+  "summary_path": "storymate/평가자료/result/chunk_experiments/chunk_larger/retriever_eval_summary.json",
+  "detail_path": "storymate/평가자료/result/chunk_experiments/chunk_larger/retriever_eval.jsonl",
+  "previous_baseline": {
+    "baseline_id": "embedding_metadata",
+    "summary_path": "storymate/평가자료/results/retriever_eval_metadata_summary.json"
+  },
+  "metrics": {
+    "all": {
+      "recall@1": 0.3583,
+      "recall@3": 0.5333,
+      "recall@5": 0.6417,
+      "hit@5": 0.75,
+      "mrr@5": 0.4601,
+      "ndcg@5": 0.4872,
+      "complete_recall@5": 0.3333
+    },
+    "psychology_interpretation": {
+      "recall@5": 0.8,
+      "mrr@5": 0.47,
+      "ndcg@5": 0.4432
+    },
+    "trait_generalization": {
+      "recall@5": 0.6667,
+      "mrr@5": 0.3022,
+      "ndcg@5": 0.4088
+    },
+    "canon_direct": {
+      "recall@5": 1.0
+    },
+    "canon_paraphrase": {
+      "recall@5": 0.95
+    }
+  },
+  "decision": "chunk_larger를 새 검색기 baseline으로 사용한다. 실제 chatbot_sql.py 반영은 생성 답변 평가 전까지 보류한다."
+}

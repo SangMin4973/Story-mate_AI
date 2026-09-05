@@ -1,0 +1,51 @@
+{
+  "created_at": "2026-09-02T23:31:10",
+  "total": 200,
+  "category_counts": {
+    "canon_fact": 40,
+    "character_psychology": 35,
+    "speech_fidelity": 25,
+    "character_consistency": 30,
+    "knowledge_boundary": 25,
+    "adversarial": 25,
+    "conversation_memory": 20
+  },
+  "category_errors": {},
+  "format_compliance": {
+    "adversarial": {
+      "ok": 18,
+      "total": 25,
+      "rate": 0.72
+    },
+    "canon_fact": {
+      "ok": 40,
+      "total": 40,
+      "rate": 1.0
+    },
+    "character_consistency": {
+      "ok": 30,
+      "total": 30,
+      "rate": 1.0
+    },
+    "character_psychology": {
+      "ok": 35,
+      "total": 35,
+      "rate": 1.0
+    },
+    "conversation_memory": {
+      "ok": 19,
+      "total": 20,
+      "rate": 0.95
+    },
+    "knowledge_boundary": {
+      "ok": 25,
+      "total": 25,
+      "rate": 1.0
+    },
+    "speech_fidelity": {
+      "ok": 24,
+      "total": 25,
+      "rate": 0.96
+    }
+  }
+}

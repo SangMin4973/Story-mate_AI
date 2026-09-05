@@ -58,7 +58,7 @@ logger = logging.getLogger(__name__)
 class ChatBot:
 
     # ✅ ChatBot 클래스 초기화
-    def __init__(self, character_name, book_title):
+    def __init__(self, character_name, book_title, retrieval_mode: str = "default"):
         resolved_book_title = resolve_key(character_prompts, book_title)
         if not resolved_book_title:
             raise ValueError(f"'{book_title}' 작품 정보를 찾을 수 없습니다.")
@@ -70,17 +70,30 @@ class ChatBot:
         base_path = find_embedding_base_path(BASE_DIR, resolved_book_title, resolved_character_name)
         self.character_name = resolved_character_name
         self.book_title = resolved_book_title
+        self.retrieval_mode = retrieval_mode
+        self.final_retriever = None
 
         # 3) DB & 리트리버 초기화
-        self.q_db = initialize_chroma_db(f"{base_path}/예상질문_chroma_db")
-        self.e_db = initialize_chroma_db(f"{base_path}/인물평가_chroma_db")
-        self.n_db = initialize_chroma_db(f"{base_path}/전문_chroma_db")
-        self.c_db = initialize_chroma_db(f"{base_path}/인물특성_chroma_db")
+        if retrieval_mode == "final_rerank":
+            from final_retriever import FinalRerankRetriever
 
-        self.q_retriever = initialize_retriever(self.q_db)
-        self.e_retriever = initialize_retriever(self.e_db)
-        self.n_retriever = initialize_retriever(self.n_db)
-        self.c_retriever = initialize_retriever(self.c_db)
+            self.final_retriever = FinalRerankRetriever(
+                base_dir=BASE_DIR,
+                book_title=resolved_book_title,
+                character_name=resolved_character_name,
+            )
+        elif retrieval_mode == "default":
+            self.q_db = initialize_chroma_db(f"{base_path}/예상질문_chroma_db")
+            self.e_db = initialize_chroma_db(f"{base_path}/인물평가_chroma_db")
+            self.n_db = initialize_chroma_db(f"{base_path}/전문_chroma_db")
+            self.c_db = initialize_chroma_db(f"{base_path}/인물특성_chroma_db")
+
+            self.q_retriever = initialize_retriever(self.q_db)
+            self.e_retriever = initialize_retriever(self.e_db)
+            self.n_retriever = initialize_retriever(self.n_db)
+            self.c_retriever = initialize_retriever(self.c_db)
+        else:
+            raise ValueError(f"지원하지 않는 retrieval_mode입니다: {retrieval_mode}")
 
         # 4) 템플릿 & LLM
         self.prompt_template = get_character_template(resolved_book_title, resolved_character_name)
@@ -140,6 +153,19 @@ class ChatBot:
 
 
     # ✅ 대화 내용을 요약하는 함수
+    def format_chat_history(self, history):
+        role_names = {
+            "human": "사용자",
+            "user": "사용자",
+            "ai": self.character_name,
+            "assistant": self.character_name,
+        }
+        return "\n".join(
+            f"{role_names.get(msg.get('role'), msg.get('role', 'unknown'))}: {msg.get('content', '')}"
+            for msg in history
+        )
+
+
     def summarize_history(self, session_id):
         """
         특정 세션의 대화 기록을 MariaDB에서 불러와 요약하는 함수
@@ -152,9 +178,7 @@ class ChatBot:
             return "이전 대화 기록이 없습니다."
 
         # 요약할 텍스트 변환 (role을 붙여서 정리)
-        conversation_text = "\n".join(
-            [f"{'사용자' if msg['role'] == 'human' else self.character_name}: {msg['content']}" for msg in history]
-        )
+        conversation_text = self.format_chat_history(history)
 
         # 요약 프롬프트 설정
         summary_prompt = (
@@ -176,7 +200,7 @@ class ChatBot:
 
 
     # ✅ 최종 답변 생성 함수
-    def get_answer(self, session_id: str, user_query: str) -> str:
+    def get_answer(self, session_id: str, user_query: str, chat_history_override=None, save_history: bool = True) -> str:
         """
         세션 ID 기반으로 DB 검색 후, 캐릭터 템플릿과 LLM으로 답변 생성
             """
@@ -187,13 +211,25 @@ class ChatBot:
         logger.info("get_answer()에서 user_query 확인: %s (type: %s)", user_query, type(user_query))
         
         # 각 DB에서 context를 검색
-        question_context  = fetch_data(self.q_retriever, user_query)
-        evaluate_context  = fetch_data(self.e_retriever, user_query)
-        novel_context     = fetch_data(self.n_retriever, user_query)
-        character_context = fetch_data(self.c_retriever, user_query)
+        if self.retrieval_mode == "final_rerank":
+            contexts = self.final_retriever.retrieve_contexts(user_query)
+            question_context = contexts["context_doc4"]
+            evaluate_context = contexts["context_doc2"]
+            novel_context = contexts["context_doc1"]
+            character_context = contexts["context_doc3"]
+        else:
+            question_context  = fetch_data(self.q_retriever, user_query)
+            evaluate_context  = fetch_data(self.e_retriever, user_query)
+            novel_context     = fetch_data(self.n_retriever, user_query)
+            character_context = fetch_data(self.c_retriever, user_query)
 
         # 이전 대화 내용 요약
-        summarized_history = self.summarize_history(session_id)
+        if chat_history_override is None:
+            summarized_history = self.summarize_history(session_id)
+        elif chat_history_override:
+            summarized_history = self.format_chat_history(chat_history_override)
+        else:
+            summarized_history = "이전 대화 기록이 없습니다."
 
         # 체인에 넣을 input_data
         input_data = {
@@ -209,6 +245,7 @@ class ChatBot:
         response = self.chain.invoke(input_data)
 
         # 대화 저장
-        self.add_conversation(session_id, user_query, response)
+        if save_history:
+            self.add_conversation(session_id, user_query, response)
 
         return response

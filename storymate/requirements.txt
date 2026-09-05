@@ -1,4 +1,6 @@
 flask
+fastapi
+uvicorn
 python-dotenv
 openai
 langchain
@@ -8,3 +10,4 @@ langchain-chroma
 chromadb
 tiktoken
 pymysql
+sentence-transformers

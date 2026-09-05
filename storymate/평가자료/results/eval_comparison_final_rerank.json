@@ -1,0 +1,926 @@
+{
+  "baseline_path": "storymate\\평가자료\\results\\eval_results.jsonl",
+  "candidate_path": "storymate\\평가자료\\results\\eval_results_final_rerank.jsonl",
+  "baseline": {
+    "total": 200,
+    "error_count": 0,
+    "category_counts": {
+      "canon_fact": 40,
+      "character_psychology": 35,
+      "speech_fidelity": 25,
+      "character_consistency": 30,
+      "knowledge_boundary": 25,
+      "adversarial": 25,
+      "conversation_memory": 20
+    },
+    "checks": {
+      "format_ok": {
+        "ok": 191,
+        "total": 200,
+        "rate": 0.955
+      },
+      "length_ok": {
+        "ok": 192,
+        "total": 200,
+        "rate": 0.96
+      },
+      "no_emoji_ok": {
+        "ok": 199,
+        "total": 200,
+        "rate": 0.995
+      },
+      "no_hidden_reasoning_ok": {
+        "ok": 198,
+        "total": 200,
+        "rate": 0.99
+      },
+      "no_ai_or_prompt_meta_ok": {
+        "ok": 198,
+        "total": 200,
+        "rate": 0.99
+      },
+      "must_include_ok": {
+        "ok": 17,
+        "total": 200,
+        "rate": 0.085
+      },
+      "must_not_claim_ok": {
+        "ok": 200,
+        "total": 200,
+        "rate": 1.0
+      }
+    },
+    "category_checks": {
+      "adversarial": {
+        "format_ok": {
+          "ok": 18,
+          "total": 25,
+          "rate": 0.72
+        },
+        "length_ok": {
+          "ok": 19,
+          "total": 25,
+          "rate": 0.76
+        },
+        "no_emoji_ok": {
+          "ok": 24,
+          "total": 25,
+          "rate": 0.96
+        },
+        "no_hidden_reasoning_ok": {
+          "ok": 23,
+          "total": 25,
+          "rate": 0.92
+        },
+        "no_ai_or_prompt_meta_ok": {
+          "ok": 23,
+          "total": 25,
+          "rate": 0.92
+        },
+        "must_include_ok": {
+          "ok": 0,
+          "total": 25,
+          "rate": 0.0
+        },
+        "must_not_claim_ok": {
+          "ok": 25,
+          "total": 25,
+          "rate": 1.0
+        }
+      },
+      "canon_fact": {
+        "format_ok": {
+          "ok": 40,
+          "total": 40,
+          "rate": 1.0
+        },
+        "length_ok": {
+          "ok": 40,
+          "total": 40,
+          "rate": 1.0
+        },
+        "no_emoji_ok": {
+          "ok": 40,
+          "total": 40,
+          "rate": 1.0
+        },
+        "no_hidden_reasoning_ok": {
+          "ok": 40,
+          "total": 40,
+          "rate": 1.0
+        },
+        "no_ai_or_prompt_meta_ok": {
+          "ok": 40,
+          "total": 40,
+          "rate": 1.0
+        },
+        "must_include_ok": {
+          "ok": 14,
+          "total": 40,
+          "rate": 0.35
+        },
+        "must_not_claim_ok": {
+          "ok": 40,
+          "total": 40,
+          "rate": 1.0
+        }
+      },
+      "character_consistency": {
+        "format_ok": {
+          "ok": 30,
+          "total": 30,
+          "rate": 1.0
+        },
+        "length_ok": {
+          "ok": 30,
+          "total": 30,
+          "rate": 1.0
+        },
+        "no_emoji_ok": {
+          "ok": 30,
+          "total": 30,
+          "rate": 1.0
+        },
+        "no_hidden_reasoning_ok": {
+          "ok": 30,
+          "total": 30,
+          "rate": 1.0
+        },
+        "no_ai_or_prompt_meta_ok": {
+          "ok": 30,
+          "total": 30,
+          "rate": 1.0
+        },
+        "must_include_ok": {
+          "ok": 0,
+          "total": 30,
+          "rate": 0.0
+        },
+        "must_not_claim_ok": {
+          "ok": 30,
+          "total": 30,
+          "rate": 1.0
+        }
+      },
+      "character_psychology": {
+        "format_ok": {
+          "ok": 35,
+          "total": 35,
+          "rate": 1.0
+        },
+        "length_ok": {
+          "ok": 35,
+          "total": 35,
+          "rate": 1.0
+        },
+        "no_emoji_ok": {
+          "ok": 35,
+          "total": 35,
+          "rate": 1.0
+        },
+        "no_hidden_reasoning_ok": {
+          "ok": 35,
+          "total": 35,
+          "rate": 1.0
+        },
+        "no_ai_or_prompt_meta_ok": {
+          "ok": 35,
+          "total": 35,
+          "rate": 1.0
+        },
+        "must_include_ok": {
+          "ok": 2,
+          "total": 35,
+          "rate": 0.0571
+        },
+        "must_not_claim_ok": {
+          "ok": 35,
+          "total": 35,
+          "rate": 1.0
+        }
+      },
+      "conversation_memory": {
+        "format_ok": {
+          "ok": 19,
+          "total": 20,
+          "rate": 0.95
+        },
+        "length_ok": {
+          "ok": 19,
+          "total": 20,
+          "rate": 0.95
+        },
+        "no_emoji_ok": {
+          "ok": 20,
+          "total": 20,
+          "rate": 1.0
+        },
+        "no_hidden_reasoning_ok": {
+          "ok": 20,
+          "total": 20,
+          "rate": 1.0
+        },
+        "no_ai_or_prompt_meta_ok": {
+          "ok": 20,
+          "total": 20,
+          "rate": 1.0
+        },
+        "must_include_ok": {
+          "ok": 1,
+          "total": 20,
+          "rate": 0.05
+        },
+        "must_not_claim_ok": {
+          "ok": 20,
+          "total": 20,
+          "rate": 1.0
+        }
+      },
+      "knowledge_boundary": {
+        "format_ok": {
+          "ok": 25,
+          "total": 25,
+          "rate": 1.0
+        },
+        "length_ok": {
+          "ok": 25,
+          "total": 25,
+          "rate": 1.0
+        },
+        "no_emoji_ok": {
+          "ok": 25,
+          "total": 25,
+          "rate": 1.0
+        },
+        "no_hidden_reasoning_ok": {
+          "ok": 25,
+          "total": 25,
+          "rate": 1.0
+        },
+        "no_ai_or_prompt_meta_ok": {
+          "ok": 25,
+          "total": 25,
+          "rate": 1.0
+        },
+        "must_include_ok": {
+          "ok": 0,
+          "total": 25,
+          "rate": 0.0
+        },
+        "must_not_claim_ok": {
+          "ok": 25,
+          "total": 25,
+          "rate": 1.0
+        }
+      },
+      "speech_fidelity": {
+        "format_ok": {
+          "ok": 24,
+          "total": 25,
+          "rate": 0.96
+        },
+        "length_ok": {
+          "ok": 24,
+          "total": 25,
+          "rate": 0.96
+        },
+        "no_emoji_ok": {
+          "ok": 25,
+          "total": 25,
+          "rate": 1.0
+        },
+        "no_hidden_reasoning_ok": {
+          "ok": 25,
+          "total": 25,
+          "rate": 1.0
+        },
+        "no_ai_or_prompt_meta_ok": {
+          "ok": 25,
+          "total": 25,
+          "rate": 1.0
+        },
+        "must_include_ok": {
+          "ok": 0,
+          "total": 25,
+          "rate": 0.0
+        },
+        "must_not_claim_ok": {
+          "ok": 25,
+          "total": 25,
+          "rate": 1.0
+        }
+      }
+    }
+  },
+  "candidate": {
+    "total": 200,
+    "error_count": 0,
+    "category_counts": {
+      "canon_fact": 40,
+      "character_psychology": 35,
+      "speech_fidelity": 25,
+      "character_consistency": 30,
+      "knowledge_boundary": 25,
+      "adversarial": 25,
+      "conversation_memory": 20
+    },
+    "checks": {
+      "format_ok": {
+        "ok": 190,
+        "total": 200,
+        "rate": 0.95
+      },
+      "length_ok": {
+        "ok": 192,
+        "total": 200,
+        "rate": 0.96
+      },
+      "no_emoji_ok": {
+        "ok": 199,
+        "total": 200,
+        "rate": 0.995
+      },
+      "no_hidden_reasoning_ok": {
+        "ok": 198,
+        "total": 200,
+        "rate": 0.99
+      },
+      "no_ai_or_prompt_meta_ok": {
+        "ok": 198,
+        "total": 200,
+        "rate": 0.99
+      },
+      "must_include_ok": {
+        "ok": 24,
+        "total": 200,
+        "rate": 0.12
+      },
+      "must_not_claim_ok": {
+        "ok": 200,
+        "total": 200,
+        "rate": 1.0
+      }
+    },
+    "category_checks": {
+      "adversarial": {
+        "format_ok": {
+          "ok": 18,
+          "total": 25,
+          "rate": 0.72
+        },
+        "length_ok": {
+          "ok": 20,
+          "total": 25,
+          "rate": 0.8
+        },
+        "no_emoji_ok": {
+          "ok": 24,
+          "total": 25,
+          "rate": 0.96
+        },
+        "no_hidden_reasoning_ok": {
+          "ok": 23,
+          "total": 25,
+          "rate": 0.92
+        },
+        "no_ai_or_prompt_meta_ok": {
+          "ok": 23,
+          "total": 25,
+          "rate": 0.92
+        },
+        "must_include_ok": {
+          "ok": 0,
+          "total": 25,
+          "rate": 0.0
+        },
+        "must_not_claim_ok": {
+          "ok": 25,
+          "total": 25,
+          "rate": 1.0
+        }
+      },
+      "canon_fact": {
+        "format_ok": {
+          "ok": 40,
+          "total": 40,
+          "rate": 1.0
+        },
+        "length_ok": {
+          "ok": 40,
+          "total": 40,
+          "rate": 1.0
+        },
+        "no_emoji_ok": {
+          "ok": 40,
+          "total": 40,
+          "rate": 1.0
+        },
+        "no_hidden_reasoning_ok": {
+          "ok": 40,
+          "total": 40,
+          "rate": 1.0
+        },
+        "no_ai_or_prompt_meta_ok": {
+          "ok": 40,
+          "total": 40,
+          "rate": 1.0
+        },
+        "must_include_ok": {
+          "ok": 21,
+          "total": 40,
+          "rate": 0.525
+        },
+        "must_not_claim_ok": {
+          "ok": 40,
+          "total": 40,
+          "rate": 1.0
+        }
+      },
+      "character_consistency": {
+        "format_ok": {
+          "ok": 30,
+          "total": 30,
+          "rate": 1.0
+        },
+        "length_ok": {
+          "ok": 30,
+          "total": 30,
+          "rate": 1.0
+        },
+        "no_emoji_ok": {
+          "ok": 30,
+          "total": 30,
+          "rate": 1.0
+        },
+        "no_hidden_reasoning_ok": {
+          "ok": 30,
+          "total": 30,
+          "rate": 1.0
+        },
+        "no_ai_or_prompt_meta_ok": {
+          "ok": 30,
+          "total": 30,
+          "rate": 1.0
+        },
+        "must_include_ok": {
+          "ok": 0,
+          "total": 30,
+          "rate": 0.0
+        },
+        "must_not_claim_ok": {
+          "ok": 30,
+          "total": 30,
+          "rate": 1.0
+        }
+      },
+      "character_psychology": {
+        "format_ok": {
+          "ok": 35,
+          "total": 35,
+          "rate": 1.0
+        },
+        "length_ok": {
+          "ok": 35,
+          "total": 35,
+          "rate": 1.0
+        },
+        "no_emoji_ok": {
+          "ok": 35,
+          "total": 35,
+          "rate": 1.0
+        },
+        "no_hidden_reasoning_ok": {
+          "ok": 35,
+          "total": 35,
+          "rate": 1.0
+        },
+        "no_ai_or_prompt_meta_ok": {
+          "ok": 35,
+          "total": 35,
+          "rate": 1.0
+        },
+        "must_include_ok": {
+          "ok": 2,
+          "total": 35,
+          "rate": 0.0571
+        },
+        "must_not_claim_ok": {
+          "ok": 35,
+          "total": 35,
+          "rate": 1.0
+        }
+      },
+      "conversation_memory": {
+        "format_ok": {
+          "ok": 18,
+          "total": 20,
+          "rate": 0.9
+        },
+        "length_ok": {
+          "ok": 18,
+          "total": 20,
+          "rate": 0.9
+        },
+        "no_emoji_ok": {
+          "ok": 20,
+          "total": 20,
+          "rate": 1.0
+        },
+        "no_hidden_reasoning_ok": {
+          "ok": 20,
+          "total": 20,
+          "rate": 1.0
+        },
+        "no_ai_or_prompt_meta_ok": {
+          "ok": 20,
+          "total": 20,
+          "rate": 1.0
+        },
+        "must_include_ok": {
+          "ok": 1,
+          "total": 20,
+          "rate": 0.05
+        },
+        "must_not_claim_ok": {
+          "ok": 20,
+          "total": 20,
+          "rate": 1.0
+        }
+      },
+      "knowledge_boundary": {
+        "format_ok": {
+          "ok": 25,
+          "total": 25,
+          "rate": 1.0
+        },
+        "length_ok": {
+          "ok": 25,
+          "total": 25,
+          "rate": 1.0
+        },
+        "no_emoji_ok": {
+          "ok": 25,
+          "total": 25,
+          "rate": 1.0
+        },
+        "no_hidden_reasoning_ok": {
+          "ok": 25,
+          "total": 25,
+          "rate": 1.0
+        },
+        "no_ai_or_prompt_meta_ok": {
+          "ok": 25,
+          "total": 25,
+          "rate": 1.0
+        },
+        "must_include_ok": {
+          "ok": 0,
+          "total": 25,
+          "rate": 0.0
+        },
+        "must_not_claim_ok": {
+          "ok": 25,
+          "total": 25,
+          "rate": 1.0
+        }
+      },
+      "speech_fidelity": {
+        "format_ok": {
+          "ok": 24,
+          "total": 25,
+          "rate": 0.96
+        },
+        "length_ok": {
+          "ok": 24,
+          "total": 25,
+          "rate": 0.96
+        },
+        "no_emoji_ok": {
+          "ok": 25,
+          "total": 25,
+          "rate": 1.0
+        },
+        "no_hidden_reasoning_ok": {
+          "ok": 25,
+          "total": 25,
+          "rate": 1.0
+        },
+        "no_ai_or_prompt_meta_ok": {
+          "ok": 25,
+          "total": 25,
+          "rate": 1.0
+        },
+        "must_include_ok": {
+          "ok": 0,
+          "total": 25,
+          "rate": 0.0
+        },
+        "must_not_claim_ok": {
+          "ok": 25,
+          "total": 25,
+          "rate": 1.0
+        }
+      }
+    }
+  },
+  "diff": {
+    "checks": {
+      "format_ok": {
+        "baseline": 0.955,
+        "candidate": 0.95,
+        "diff": -0.005
+      },
+      "length_ok": {
+        "baseline": 0.96,
+        "candidate": 0.96,
+        "diff": 0.0
+      },
+      "no_emoji_ok": {
+        "baseline": 0.995,
+        "candidate": 0.995,
+        "diff": 0.0
+      },
+      "no_hidden_reasoning_ok": {
+        "baseline": 0.99,
+        "candidate": 0.99,
+        "diff": 0.0
+      },
+      "no_ai_or_prompt_meta_ok": {
+        "baseline": 0.99,
+        "candidate": 0.99,
+        "diff": 0.0
+      },
+      "must_include_ok": {
+        "baseline": 0.085,
+        "candidate": 0.12,
+        "diff": 0.035
+      },
+      "must_not_claim_ok": {
+        "baseline": 1.0,
+        "candidate": 1.0,
+        "diff": 0.0
+      }
+    },
+    "category_checks": {
+      "adversarial": {
+        "format_ok": {
+          "baseline": 0.72,
+          "candidate": 0.72,
+          "diff": 0.0
+        },
+        "length_ok": {
+          "baseline": 0.76,
+          "candidate": 0.8,
+          "diff": 0.04
+        },
+        "no_emoji_ok": {
+          "baseline": 0.96,
+          "candidate": 0.96,
+          "diff": 0.0
+        },
+        "no_hidden_reasoning_ok": {
+          "baseline": 0.92,
+          "candidate": 0.92,
+          "diff": 0.0
+        },
+        "no_ai_or_prompt_meta_ok": {
+          "baseline": 0.92,
+          "candidate": 0.92,
+          "diff": 0.0
+        },
+        "must_include_ok": {
+          "baseline": 0.0,
+          "candidate": 0.0,
+          "diff": 0.0
+        },
+        "must_not_claim_ok": {
+          "baseline": 1.0,
+          "candidate": 1.0,
+          "diff": 0.0
+        }
+      },
+      "canon_fact": {
+        "format_ok": {
+          "baseline": 1.0,
+          "candidate": 1.0,
+          "diff": 0.0
+        },
+        "length_ok": {
+          "baseline": 1.0,
+          "candidate": 1.0,
+          "diff": 0.0
+        },
+        "no_emoji_ok": {
+          "baseline": 1.0,
+          "candidate": 1.0,
+          "diff": 0.0
+        },
+        "no_hidden_reasoning_ok": {
+          "baseline": 1.0,
+          "candidate": 1.0,
+          "diff": 0.0
+        },
+        "no_ai_or_prompt_meta_ok": {
+          "baseline": 1.0,
+          "candidate": 1.0,
+          "diff": 0.0
+        },
+        "must_include_ok": {
+          "baseline": 0.35,
+          "candidate": 0.525,
+          "diff": 0.175
+        },
+        "must_not_claim_ok": {
+          "baseline": 1.0,
+          "candidate": 1.0,
+          "diff": 0.0
+        }
+      },
+      "character_consistency": {
+        "format_ok": {
+          "baseline": 1.0,
+          "candidate": 1.0,
+          "diff": 0.0
+        },
+        "length_ok": {
+          "baseline": 1.0,
+          "candidate": 1.0,
+          "diff": 0.0
+        },
+        "no_emoji_ok": {
+          "baseline": 1.0,
+          "candidate": 1.0,
+          "diff": 0.0
+        },
+        "no_hidden_reasoning_ok": {
+          "baseline": 1.0,
+          "candidate": 1.0,
+          "diff": 0.0
+        },
+        "no_ai_or_prompt_meta_ok": {
+          "baseline": 1.0,
+          "candidate": 1.0,
+          "diff": 0.0
+        },
+        "must_include_ok": {
+          "baseline": 0.0,
+          "candidate": 0.0,
+          "diff": 0.0
+        },
+        "must_not_claim_ok": {
+          "baseline": 1.0,
+          "candidate": 1.0,
+          "diff": 0.0
+        }
+      },
+      "character_psychology": {
+        "format_ok": {
+          "baseline": 1.0,
+          "candidate": 1.0,
+          "diff": 0.0
+        },
+        "length_ok": {
+          "baseline": 1.0,
+          "candidate": 1.0,
+          "diff": 0.0
+        },
+        "no_emoji_ok": {
+          "baseline": 1.0,
+          "candidate": 1.0,
+          "diff": 0.0
+        },
+        "no_hidden_reasoning_ok": {
+          "baseline": 1.0,
+          "candidate": 1.0,
+          "diff": 0.0
+        },
+        "no_ai_or_prompt_meta_ok": {
+          "baseline": 1.0,
+          "candidate": 1.0,
+          "diff": 0.0
+        },
+        "must_include_ok": {
+          "baseline": 0.0571,
+          "candidate": 0.0571,
+          "diff": 0.0
+        },
+        "must_not_claim_ok": {
+          "baseline": 1.0,
+          "candidate": 1.0,
+          "diff": 0.0
+        }
+      },
+      "conversation_memory": {
+        "format_ok": {
+          "baseline": 0.95,
+          "candidate": 0.9,
+          "diff": -0.05
+        },
+        "length_ok": {
+          "baseline": 0.95,
+          "candidate": 0.9,
+          "diff": -0.05
+        },
+        "no_emoji_ok": {
+          "baseline": 1.0,
+          "candidate": 1.0,
+          "diff": 0.0
+        },
+        "no_hidden_reasoning_ok": {
+          "baseline": 1.0,
+          "candidate": 1.0,
+          "diff": 0.0
+        },
+        "no_ai_or_prompt_meta_ok": {
+          "baseline": 1.0,
+          "candidate": 1.0,
+          "diff": 0.0
+        },
+        "must_include_ok": {
+          "baseline": 0.05,
+          "candidate": 0.05,
+          "diff": 0.0
+        },
+        "must_not_claim_ok": {
+          "baseline": 1.0,
+          "candidate": 1.0,
+          "diff": 0.0
+        }
+      },
+      "knowledge_boundary": {
+        "format_ok": {
+          "baseline": 1.0,
+          "candidate": 1.0,
+          "diff": 0.0
+        },
+        "length_ok": {
+          "baseline": 1.0,
+          "candidate": 1.0,
+          "diff": 0.0
+        },
+        "no_emoji_ok": {
+          "baseline": 1.0,
+          "candidate": 1.0,
+          "diff": 0.0
+        },
+        "no_hidden_reasoning_ok": {
+          "baseline": 1.0,
+          "candidate": 1.0,
+          "diff": 0.0
+        },
+        "no_ai_or_prompt_meta_ok": {
+          "baseline": 1.0,
+          "candidate": 1.0,
+          "diff": 0.0
+        },
+        "must_include_ok": {
+          "baseline": 0.0,
+          "candidate": 0.0,
+          "diff": 0.0
+        },
+        "must_not_claim_ok": {
+          "baseline": 1.0,
+          "candidate": 1.0,
+          "diff": 0.0
+        }
+      },
+      "speech_fidelity": {
+        "format_ok": {
+          "baseline": 0.96,
+          "candidate": 0.96,
+          "diff": 0.0
+        },
+        "length_ok": {
+          "baseline": 0.96,
+          "candidate": 0.96,
+          "diff": 0.0
+        },
+        "no_emoji_ok": {
+          "baseline": 1.0,
+          "candidate": 1.0,
+          "diff": 0.0
+        },
+        "no_hidden_reasoning_ok": {
+          "baseline": 1.0,
+          "candidate": 1.0,
+          "diff": 0.0
+        },
+        "no_ai_or_prompt_meta_ok": {
+          "baseline": 1.0,
+          "candidate": 1.0,
+          "diff": 0.0
+        },
+        "must_include_ok": {
+          "baseline": 0.0,
+          "candidate": 0.0,
+          "diff": 0.0
+        },
+        "must_not_claim_ok": {
+          "baseline": 1.0,
+          "candidate": 1.0,
+          "diff": 0.0
+        }
+      }
+    }
+  }
+}

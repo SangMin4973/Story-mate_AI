@@ -1,0 +1,92 @@
+{
+  "all": {
+    "count": 120,
+    "recall@1": 0.35,
+    "recall@3": 0.525,
+    "recall@5": 0.5833,
+    "hit@1": 0.4,
+    "hit@3": 0.6167,
+    "hit@5": 0.7167,
+    "mrr@5": 0.4374,
+    "ndcg@5": 0.4646,
+    "complete_recall@5": 0.4667
+  },
+  "canon_direct": {
+    "count": 20,
+    "recall@1": 0.65,
+    "recall@3": 0.9,
+    "recall@5": 0.95,
+    "hit@1": 0.65,
+    "hit@3": 0.9,
+    "hit@5": 0.95,
+    "mrr@5": 0.76,
+    "ndcg@5": 0.8074
+  },
+  "canon_paraphrase": {
+    "count": 20,
+    "recall@1": 0.7,
+    "recall@3": 0.85,
+    "recall@5": 1.0,
+    "hit@1": 0.7,
+    "hit@3": 0.85,
+    "hit@5": 1.0,
+    "mrr@5": 0.8042,
+    "ndcg@5": 0.8527
+  },
+  "psychology_multihop": {
+    "count": 15,
+    "recall@1": 0.6667,
+    "recall@3": 0.8667,
+    "recall@5": 0.9333,
+    "hit@1": 0.6667,
+    "hit@3": 0.8667,
+    "hit@5": 0.9333,
+    "mrr@5": 0.7722,
+    "ndcg@5": 0.6329,
+    "complete_recall@5": 0.4667
+  },
+  "psychology_interpretation": {
+    "count": 20,
+    "recall@1": 0.25,
+    "recall@3": 0.5,
+    "recall@5": 0.55,
+    "hit@1": 0.35,
+    "hit@3": 0.65,
+    "hit@5": 0.65,
+    "mrr@5": 0.36,
+    "ndcg@5": 0.3508
+  },
+  "trait_generalization": {
+    "count": 15,
+    "recall@1": 0.0,
+    "recall@3": 0.3333,
+    "recall@5": 0.4,
+    "hit@1": 0.2667,
+    "hit@3": 0.6667,
+    "hit@5": 0.8667,
+    "mrr@5": 0.1611,
+    "ndcg@5": 0.3229
+  },
+  "voice_example": {
+    "count": 15,
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "hit@1": 0.0,
+    "hit@3": 0.2,
+    "hit@5": 0.4667,
+    "mrr@5": 0.0,
+    "ndcg@5": 0.0793
+  },
+  "unanswerable": {
+    "count": 15,
+    "recall@1": 0.0,
+    "recall@3": 0.0,
+    "recall@5": 0.0,
+    "hit@1": 0.0,
+    "hit@3": 0.0,
+    "hit@5": 0.0,
+    "mrr@5": 0.0,
+    "ndcg@5": 0.0
+  }
+}
